@@ -24,15 +24,13 @@ def index():
 
 @app.route("/salir")
 def logout():
-    session.clear()
-    return redirect("register")
 
 
 @app.route("/register", methods=["GET","POST"])
 def register():
     if request.method == "POST":
         # ASEGURAR ENVIO DEL USER
-        if not request.form.get("username"):
+
             flash("Ingrese un nombre")
             return render_template("register.html")
         elif not request.form.get("password"):
@@ -45,7 +43,6 @@ def register():
 
         # GUARDAR DATOS
         user = request.form.get("username")
-        passw = request.form.get("password")
         # REGISTRAR NUEVO USUARIO
 
         result = db.execute("INSERT INTO users (username,password) VALUES (:username, :password)",
