@@ -6,7 +6,7 @@ from werkzeug.exceptions import default_exceptions
 from werkzeug.security import check_password_hash, generate_password_hash
 
 app = Flask(__name__)
-
+#Esto es un comentario
 app.config["SESSION_FILE_DIR"] = mkdtemp()
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
@@ -26,8 +26,8 @@ def index():
 def logout():
     session.clear()
     return redirect("register")
-    
-    
+
+
 @app.route("/register", methods=["GET","POST"])
 def register():
     if request.method == "POST":
@@ -41,30 +41,30 @@ def register():
         elif request.form.get("password") != request.form.get("confirmation"):
             flash("Las contraseñas no coinciden")
             return render_template("register.html")
-        
-        
+
+
         # GUARDAR DATOS
         user = request.form.get("username")
         passw = request.form.get("password")
         # REGISTRAR NUEVO USUARIO
-        
+
         result = db.execute("INSERT INTO users (username,password) VALUES (:username, :password)",
                             username = user, password = generate_password_hash(passw)
                             )
-        # VERIFICANDO SI EL USUARIO YA EXISTE                   
+        # VERIFICANDO SI EL USUARIO YA EXISTE
         if not result:
             flash("El usuario ya existe")
             return render_template("register.html")
-        
+
         # ALMACENANDO EN LA SESSION
         session["user_id"] = result
-        
+
         return redirect("/")
     else:
         return render_template("register.html")
-        
-        
-        
+
+
+
 @app.route("/login")
 def login():
     return render_template("login.html")
